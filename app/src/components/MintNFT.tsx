@@ -5,6 +5,8 @@ import { Program, AnchorProvider, Idl } from '@coral-xyz/anchor'
 import { Keypair, PublicKey, SystemProgram, SYSVAR_RENT_PUBKEY } from '@solana/web3.js'
 import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { motion, AnimatePresence } from 'framer-motion'
+import Card3D from './Card3D'
+import '../components/Card3D.css'
 import idl from '../../../target/idl/nft.json'
 
 const TOKEN_METADATA_PROGRAM_ID = new PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s')
@@ -150,17 +152,13 @@ export default function MintNFT() {
         <div className="shape shape-3"></div>
       </div>
 
-      <motion.div 
+      <motion.div
         className="container"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <motion.div 
-          className="card"
-          whileHover={{ scale: 1.02 }}
-          transition={{ type: "spring", stiffness: 300 }}
-        >
+        <Card3D className="card">
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -282,7 +280,7 @@ export default function MintNFT() {
               </motion.div>
             )}
           </AnimatePresence>
-        </motion.div>
+        </Card3D>
       </motion.div>
     </>
   )

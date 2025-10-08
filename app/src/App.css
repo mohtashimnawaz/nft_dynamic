@@ -22,11 +22,11 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 30px;
   padding: 3rem;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
-              0 0 100px rgba(138, 43, 226, 0.2),
-              inset 0 0 60px rgba(255, 255, 255, 0.03);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 100px rgba(138, 43, 226, 0.2),
+    inset 0 0 60px rgba(255, 255, 255, 0.03);
   position: relative;
   overflow: hidden;
+  transform-style: preserve-3d;
 }
 
 .card::before {
@@ -46,9 +46,34 @@
   animation: shimmer 3s infinite;
 }
 
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(102, 126, 234, 0.1),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
 @keyframes shimmer {
-  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
 }
 
 h1 {
@@ -122,6 +147,13 @@ textarea {
   color: #fff;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  position: relative;
+}
+
+input:hover,
+textarea:hover {
+  border-color: rgba(102, 126, 234, 0.3);
+  background: rgba(255, 255, 255, 0.07);
 }
 
 input:focus,
@@ -129,7 +161,9 @@ textarea:focus {
   outline: none;
   border-color: #667eea;
   background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.3), 0 0 40px rgba(138, 43, 226, 0.2),
+    inset 0 0 20px rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
 }
 
 input::placeholder,
@@ -141,6 +175,34 @@ textarea {
   resize: vertical;
   min-height: 100px;
   font-family: inherit;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.form-group::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(102, 126, 234, 0.1),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: 12px;
+}
+
+.form-group:focus-within::before {
+  opacity: 1;
 }
 
 .mint-button {
@@ -169,26 +231,61 @@ textarea {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
   transition: left 0.5s;
+}
+
+.mint-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
 }
 
 .mint-button:hover:not(:disabled)::before {
   left: 100%;
 }
 
+.mint-button:hover:not(:disabled)::after {
+  width: 400px;
+  height: 400px;
+}
+
 .mint-button:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 20px 50px rgba(102, 126, 234, 0.6),
+    0 0 60px rgba(138, 43, 226, 0.3);
 }
 
 .mint-button:active:not(:disabled) {
-  transform: translateY(-1px);
+  transform: translateY(-1px) scale(1);
 }
 
 .mint-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+  }
 }
 
 .status {
@@ -289,7 +386,8 @@ textarea {
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) scale(1);
   }
   33% {
@@ -298,4 +396,27 @@ textarea {
   66% {
     transform: translate(-50px, 50px) scale(0.9);
   }
+}
+
+.back-button {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(20, 20, 30, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.back-button:hover {
+  background: rgba(102, 126, 234, 0.3);
+  border-color: rgba(102, 126, 234, 0.5);
+  transform: translateX(-5px);
 }
