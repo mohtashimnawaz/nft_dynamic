@@ -12,7 +12,7 @@ nft = "FQuod36e7YC62xJPhpwJvBZMzsVPn36bYL2pjHMWNT2y"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
